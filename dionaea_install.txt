@@ -11,8 +11,8 @@ add-apt-repository ppa:honeynet/nightly -y
 apt-get update
 
 ## SSHD Configuration (Optional)
-sed -i 's/Port 22/Port 2222/g' /etc/ssh/sshd_config
-sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+# sed -i 's/Port 22/Port 2222/g' /etc/ssh/sshd_config
+# sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 
 ## p0f Installation and Configuration (Optional)
