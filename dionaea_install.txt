@@ -22,8 +22,8 @@ ln -s /opt/dionaea/etc/dionaea/ihandlers-available/p0f.yaml /opt/dionaea/etc/dio
 ## Start p0f and write to file /opt/dionaea/var/dionaea/p0f.log
 p0f -i any -u root -Q /tmp/p0f.sock -q -l -d -o /opt/dionaea/var/dionaea/p0f.log
 
-## Change Logging (dionaea.log) from ALL to WARNING, CRITICAL (Optional)
-sed -i 's/default.levels=warning,error/default.levels=critical/g' /opt/dionaea/etc/dionaea/dionaea.cfg
+## Change Logging (dionaea.log) from ALL to WARNING, CRITICAL (Optional however without this your disk will be full. or use logrotate)
+sed -i 's/default.levels=all/default.levels=warning,error/g' /opt/dionaea/etc/dionaea/dionaea.cfg
 
 ## Hide Dionaea from NMAP (Optional)
 #SMB
