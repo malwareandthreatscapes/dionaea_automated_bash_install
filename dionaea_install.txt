@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Some parts of the script are optional and if you want to use just uncomment and make any changes that you require.
+# Some parts of the script are optional and if you want to use just uncomment and make any changes that you require.
 
 ## Update OS, Install Dioanea and p0f
 export DEBIAN_FRONTEND=noninteractive
@@ -22,10 +22,10 @@ ln -s /opt/dionaea/etc/dionaea/ihandlers-available/p0f.yaml /opt/dionaea/etc/dio
 ## Start p0f and write to file /opt/dionaea/var/dionaea/p0f.log
 p0f -i any -u root -Q /tmp/p0f.sock -q -l -d -o /opt/dionaea/var/dionaea/p0f.log
 
-## Change Logging (dionaea.log) from ALL to WARNING, CRITICAL
+## Change Logging (dionaea.log) from ALL to WARNING, CRITICAL (Optional)
 sed -i 's/default.levels=warning,error/default.levels=critical/g' /opt/dionaea/etc/dionaea/dionaea.cfg
 
-## Hide Dionaea from NMAP
+## Hide Dionaea from NMAP (Optional)
 #SMB
 sed -i 's/# os_type: 2/os_type: 4/g' /opt/dionaea/etc/dionaea/services-enabled/smb.yaml
 sed -i 's/# primary_domain: TEST/primary_domain: accounting/g' /opt/dionaea/etc/dionaea/services-enabled/smb.yaml
