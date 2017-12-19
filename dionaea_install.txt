@@ -1,0 +1,27 @@
+# Update OS, Install Dioanea and p0f
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get dist-upgrade -y
+apt-get install software-properties-common -y
+add-apt-repository ppa:honeynet/nightly -y
+apt-get update
+apt-get install dionaea p0f binutils -y
+#Add p0f as an enabled ihandler (optional)
+ln -s /opt/dionaea/etc/dionaea/ihandlers-available/p0f.yaml /opt/dionaea/etc/dionaea/ihandlers-enabled
+# Start Services
+service dionaea start
+# Add dionaea to start at boot
+update-rc.d dionaea defaults
+# Start p0f and write to file /opt/dionaea/var/dionaea/p0f.log (optional)
+p0f -i any -u root -Q /tmp/p0f.sock -q -l -d -o /opt/dionaea/var/dionaea/p0f.log
+
+# Optional To Do
+# Update SSH settings
+# Add other user and disable Root login
+# Additional Dionaea config
+# Rotate those logs...
+
+
+
+
+
