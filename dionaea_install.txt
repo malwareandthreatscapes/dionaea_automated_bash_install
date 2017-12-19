@@ -1,29 +1,49 @@
 #!/bin/bash
 
-# Update OS, Install Dioanea and p0f
+Some parts of the script are optional and if you want to use just uncomment and make any changes that you require.
+
+## Update OS, Install Dioanea and p0f
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get dist-upgrade -y
 apt-get install software-properties-common -y
 add-apt-repository ppa:honeynet/nightly -y
 apt-get update
+
+## SSHD Configuration (Optional)
+sed -i 's/Port 22/Port 2222/g' /etc/ssh/sshd_config
+sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+
+## p0f Installation and Configuration (Optional)
 apt-get install dionaea p0f binutils -y
-#Add p0f as an enabled ihandler (optional)
+## Add p0f as an enabled ihandler
 ln -s /opt/dionaea/etc/dionaea/ihandlers-available/p0f.yaml /opt/dionaea/etc/dionaea/ihandlers-enabled
-# Start Services
-service dionaea start
-# Add dionaea to start at boot
-update-rc.d dionaea defaults
-# Start p0f and write to file /opt/dionaea/var/dionaea/p0f.log (optional)
+## Start p0f and write to file /opt/dionaea/var/dionaea/p0f.log
 p0f -i any -u root -Q /tmp/p0f.sock -q -l -d -o /opt/dionaea/var/dionaea/p0f.log
 
-# Optional To Do
-# Update SSH settings
-# Add other user and disable Root login
-# Additional Dionaea config
-# Rotate those logs...
+## Change Logging (dionaea.log) from ALL to WARNING, CRITICAL
+sed -i 's/default.levels=warning,error/default.levels=critical/g' /opt/dionaea/etc/dionaea/dionaea.cfg
+
+## Hide Dionaea from NMAP
+#SMB
+sed -i 's/# os_type: 2/os_type: 4/g' /opt/dionaea/etc/dionaea/services-enabled/smb.yaml
+sed -i 's/# primary_domain: TEST/primary_domain: accounting/g' /opt/dionaea/etc/dionaea/services-enabled/smb.yaml
+sed -i 's/# oem_domain_name: TEST/primary_domain: accounting/g' /opt/dionaea/etc/dionaea/services-enabled/smb.yaml
+sed -i 's/# server_name: TEST-SERVER/server_name: admin01/g' /opt/dionaea/etc/dionaea/services-enabled/smb.yaml
+#MSSQL
+sed -i 's/r.VersionToken.TokenType = 0x00/r.VersionToken.TokenType = 0x21/g' /opt/dionaea/lib/dionaea/python/dionaea/mssql/mssql.py
+
+## Add dionaea to start at boot
+update-rc.d dionaea defaults
+
+## Start Services
+service dionaea start
 
 
 
 
 
+## TO DO LIST
+## Add other user apart from Root and prevent Root login
+## Additional Dionaea config
